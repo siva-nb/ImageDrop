@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+"-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+"http://struts.apache.org/dtds/struts-2.0.dtd">
+
+<struts>
+	<package name="default" namespace="/" extends="struts-default">
+		
+		<interceptors>
+			<interceptor name="authentication" class="edu.uta.imagedrop.interceptor.AuthenticationInterceptor"></interceptor>
+			<interceptor-stack name="authStack">
+				<interceptor-ref name="authentication"></interceptor-ref>
+				<interceptor-ref name="defaultStack"></interceptor-ref>
+			</interceptor-stack>
+		</interceptors>
+		<default-interceptor-ref name="authStack"></default-interceptor-ref>
+		<global-results>
+    		<result name="login" type="redirect">index.jsp</result>
+		</global-results>
+		<action name="login">
+			<interceptor-ref name="defaultStack"></interceptor-ref>
+			<result>index.jsp</result>
+		</action>
+		<action name="home" class="edu.uta.imagedrop.action.HomeAction" method="listAll">
+			<result>home.jsp</result>
+		</action>
+
+		<action name="logout" class="edu.uta.imagedrop.action.LogoutAction">
+			<result name="success" type="redirectAction">login</result>
+		</action>
+		
+		<action name="authenticate" class="edu.uta.imagedrop.action.LoginAction" method="authenticate">
+			<interceptor-ref name="defaultStack"></interceptor-ref>
+			<result name="success" type="redirectAction">home</result>
+		</action>
+		
+		<action name="createNew" class="edu.uta.imagedrop.action.HomeAction" method="createNew">
+			<result name="success">/upload.jsp</result>
+		</action>
+		
+		<action name="handleCreateNew" class="edu.uta.imagedrop.action.HomeAction">
+			<result name="success" type="redirectAction">home</result>
+			<result name="input" type="redirectAction">home</result>
+		</action>
+		<action name="showMedia" class="edu.uta.imagedrop.action.HomeAction" method="showMedia">
+			<result name="success">/showMedia.jsp</result>
+		</action>
+		<action name="createNewComment" class="edu.uta.imagedrop.action.HomeAction" method="createNewComment">
+			<result name="success">/showMedia.jsp</result>
+		</action>
+		
+	</package>
+
+</struts>
